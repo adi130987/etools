@@ -6,7 +6,7 @@ from django.utils import timezone
 import factory.fuzzy
 
 from etools.applications.action_points.models import ActionPoint
-from etools.applications.locations.tests.factories import LocationFactory
+from unicef_locations.tests.factories import LocationFactory
 from etools.applications.partners.tests.factories import InterventionFactory, ResultFactory
 from etools.applications.reports.tests.factories import SectorFactory
 from etools.applications.users.tests.factories import UserFactory

@@ -1,7 +1,7 @@
 import datetime
 
 from etools.applications.funds.tests.factories import FundsReservationHeaderFactory
-from etools.applications.locations.tests.factories import GatewayTypeFactory, LocationFactory
+from unicef_locations.tests.factories import GatewayTypeFactory, LocationFactory
 from etools.applications.partners.models import Intervention, InterventionBudget, InterventionResultLink
 from etools.applications.partners.tests.factories import AgreementFactory, InterventionFactory, PartnerFactory
 from etools.applications.reports.models import AppliedIndicator, IndicatorBlueprint, LowerResult, ResultType

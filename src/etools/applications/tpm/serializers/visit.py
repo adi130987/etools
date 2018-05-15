@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from etools.applications.activities.serializers import ActivitySerializer
-from etools.applications.locations.serializers import LocationLightSerializer
+from unicef_locations.serializers import LocationLightSerializer
 from etools.applications.partners.models import InterventionResultLink, PartnerType
 from etools.applications.partners.serializers.interventions_v2 import InterventionCreateUpdateSerializer
 from etools.applications.partners.serializers.partner_organization_v2 import MinimalPartnerOrganizationListSerializer

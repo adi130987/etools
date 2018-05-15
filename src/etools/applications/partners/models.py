@@ -25,7 +25,7 @@ from etools.applications.environment.helpers import tenant_switch_is_active
 from etools.applications.EquiTrack.fields import CurrencyField, QuarterField
 from etools.applications.EquiTrack.utils import get_current_year, get_quarter, import_permissions
 from etools.applications.funds.models import Grant
-from etools.applications.locations.models import Location
+from unicef_locations.models import Location
 from etools.applications.partners.validation import interventions as intervention_validation
 from etools.applications.partners.validation.agreements import (agreement_transition_to_ended_valid,
                                                                 agreement_transition_to_signed_valid,

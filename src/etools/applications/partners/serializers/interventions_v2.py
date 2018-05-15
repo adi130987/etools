@@ -12,7 +12,7 @@ from etools.applications.attachments.serializers_fields import AttachmentSingleF
 from etools.applications.EquiTrack.serializers import SnapshotModelSerializer
 from etools.applications.funds.models import FundsCommitmentItem, FundsReservationHeader
 from etools.applications.funds.serializers import FRsSerializer
-from etools.applications.locations.serializers import LocationLightSerializer, LocationSerializer
+from unicef_locations.serializers import LocationLightSerializer, LocationSerializer
 from etools.applications.partners.models import (Intervention,  # TODO intervention sector locations cleanup
                                                  InterventionAmendment, InterventionAttachment, InterventionBudget,
                                                  InterventionPlannedVisits, InterventionReportingPeriod,
