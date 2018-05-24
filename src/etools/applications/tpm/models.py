@@ -16,8 +16,8 @@ from etools.applications.activities.models import Activity
 from etools.applications.attachments.models import Attachment
 from etools.applications.EquiTrack.utils import get_environment
 from etools.applications.notification.utils import send_notification_using_email_template
-from etools.applications.publics.models import SoftDeleteMixin
 from etools.applications.permissions2.fsm import has_action_permission
+from etools.applications.publics.models import SoftDeleteMixin
 from etools.applications.tpm.tpmpartners.models import TPMPartner, TPMPartnerStaffMember
 from etools.applications.tpm.transitions.conditions import (TPMVisitAssignRequiredFieldsCheck,
                                                             TPMVisitReportValidations, ValidateTPMVisitActivities,)

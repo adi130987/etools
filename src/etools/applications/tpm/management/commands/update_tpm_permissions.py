@@ -3,11 +3,11 @@ from django.core.management import BaseCommand
 from django.db.models import Q
 from django.utils import six
 
+from etools.applications.permissions2.conditions import GroupCondition, NewObjectCondition, ObjectStatusCondition
 from etools.applications.permissions2.models import Permission
-from etools.applications.permissions2.conditions import ObjectStatusCondition, \
-    NewObjectCondition, GroupCondition
-from etools.applications.tpm.conditions import TPMStaffMemberCondition, TPMVisitUNICEFFocalPointCondition, TPMVisitTPMFocalPointCondition
-from etools.applications.tpm.models import UNICEFUser, PME, ThirdPartyMonitor, TPMVisit
+from etools.applications.tpm.conditions import (TPMStaffMemberCondition, TPMVisitTPMFocalPointCondition,
+                                                TPMVisitUNICEFFocalPointCondition,)
+from etools.applications.tpm.models import PME, ThirdPartyMonitor, TPMVisit, UNICEFUser
 
 
 class Command(BaseCommand):

@@ -118,3 +118,5 @@ src/etools/config/settings/custom.py
 *secrets.yml
 /dist
 .tox
+coverage.xml
+.pytest_cache

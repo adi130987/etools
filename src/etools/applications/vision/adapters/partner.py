@@ -6,8 +6,8 @@ from decimal import Decimal
 from etools.applications.partners.models import PartnerOrganization, PlannedEngagement
 from etools.applications.partners.tasks import notify_partner_hidden
 from etools.applications.vision.utils import comp_decimals
-from etools.applications.vision.vision_data_synchronizer import (
-    FileDataSynchronizer, VISION_NO_DATA_MESSAGE, VisionDataSynchronizer,)
+from etools.applications.vision.vision_data_synchronizer import (FileDataSynchronizer, VISION_NO_DATA_MESSAGE,
+                                                                 VisionDataSynchronizer,)
 
 logger = logging.getLogger(__name__)
 

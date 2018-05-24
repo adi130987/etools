@@ -3,7 +3,8 @@ from django.conf.urls import include, url
 
 from rest_framework_nested import routers
 
-from etools.applications.tpm.views import ActionPointViewSet, TPMPartnerViewSet, TPMStaffMembersViewSet, TPMVisitViewSet
+from etools.applications.tpm.views import (ActionPointViewSet, TPMPartnerViewSet,
+                                           TPMStaffMembersViewSet, TPMVisitViewSet,)
 from etools.applications.utils.common.routers import NestedComplexRouter
 
 tpm_partners_api = routers.SimpleRouter()

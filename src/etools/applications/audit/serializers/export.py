@@ -8,7 +8,7 @@ from rest_framework import serializers
 
 from etools.applications.attachments.serializers import AttachmentPDFSerializer
 from etools.applications.audit.models import (Audit, Engagement, EngagementActionPoint, Finding, MicroAssessment,
-                                              SpecialAuditRecommendation, SpecificProcedure, SpotCheck, Risk)
+                                              Risk, SpecialAuditRecommendation, SpecificProcedure, SpotCheck,)
 from etools.applications.audit.purchase_order.models import AuditorFirm, AuditorStaffMember, PurchaseOrder
 from etools.applications.audit.serializers.auditor import PurchaseOrderItemSerializer
 from etools.applications.audit.serializers.engagement import (DetailedFindingInfoSerializer,

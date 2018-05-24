@@ -14,7 +14,7 @@ from etools.applications.locations.tests.factories import LocationFactory
 from etools.applications.partners.models import InterventionResultLink, InterventionSectorLocationLink
 from etools.applications.partners.tests.factories import InterventionFactory
 from etools.applications.reports.tests.factories import ResultFactory, SectorFactory
-from etools.applications.tpm.models import TPMActivity, TPMVisit, TPMVisitReportRejectComment, TPMActionPoint
+from etools.applications.tpm.models import TPMActionPoint, TPMActivity, TPMVisit, TPMVisitReportRejectComment
 from etools.applications.tpm.tpmpartners.models import TPMPartner, TPMPartnerStaffMember
 from etools.applications.users.tests.factories import OfficeFactory as SimpleOfficeFactory
 
