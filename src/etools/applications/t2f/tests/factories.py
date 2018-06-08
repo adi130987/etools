@@ -109,19 +109,6 @@ class ClearanceFactory(factory.DjangoModelFactory):
         model = models.Clearances
 
 
-class ActionPointFactory(factory.DjangoModelFactory):
-    action_point_number = factory.Sequence(lambda n: models.make_action_point_number())
-    description = fuzzy.FuzzyText(length=128)
-    due_date = fuzzy.FuzzyDateTime(start_dt=_FUZZY_START_DATE, end_dt=timezone.now())
-    person_responsible = factory.SubFactory(UserFactory)
-    assigned_by = factory.SubFactory(UserFactory)
-    status = 'open'
-    created_at = timezone.now()
-
-    class Meta:
-        model = models.ActionPoint
-
-
 class TravelFactory(factory.DjangoModelFactory):
     traveler = factory.SubFactory(UserFactory)
     supervisor = factory.SubFactory(UserFactory)
@@ -141,7 +128,7 @@ class TravelFactory(factory.DjangoModelFactory):
     deductions = factory.RelatedFactory(DeductionFactory, 'travel')
     cost_assignments = factory.RelatedFactory(CostAssignmentFactory, 'travel')
     clearances = factory.RelatedFactory(ClearanceFactory, 'travel')
-    action_points = factory.RelatedFactory(ActionPointFactory, 'travel')
+    # action_points = factory.RelatedFactory(ActionPointFactory, 'travel')
 
     @factory.post_generation
     def populate_activities(self, create, extracted, **kwargs):

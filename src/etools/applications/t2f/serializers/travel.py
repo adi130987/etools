@@ -1,6 +1,5 @@
 
 import operator
-from datetime import datetime
 from itertools import chain
 
 from django.contrib.auth import get_user_model
@@ -15,12 +14,14 @@ from django.utils.translation import ugettext
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from etools.applications.action_points.models import ActionPoint
+from etools.applications.action_points.serializers import ActionPointSerializer
 from etools.applications.locations.models import Location
 from etools.applications.partners.models import PartnerType
 from etools.applications.publics.models import AirlineCompany, Currency
 from etools.applications.reports.models import Sector
 from etools.applications.t2f.helpers.permission_matrix import PermissionMatrix
-from etools.applications.t2f.models import (ActionPoint, Clearances, CostAssignment, Deduction, Expense,
+from etools.applications.t2f.models import (Clearances, CostAssignment, Deduction, Expense,
                                             ItineraryItem, Travel, TravelActivity, TravelAttachment, TravelType,)
 from etools.applications.t2f.serializers import CostSummarySerializer
 
@@ -69,58 +70,6 @@ class PermissionBasedModelSerializer(serializers.ModelSerializer):
 
     def _can_write_field(self, field):
         return self._check_permission(PermissionMatrix.EDIT, field.field_name)
-
-
-class ActionPointSerializer(serializers.ModelSerializer):
-    trip_reference_number = serializers.CharField(source='travel.reference_number', read_only=True)
-    action_point_number = serializers.CharField(read_only=True)
-    trip_id = serializers.IntegerField(source='travel.id', read_only=True)
-    assigned_by = serializers.IntegerField(source='assigned_by.id', read_only=True)
-    assigned_by_name = serializers.CharField(source='assigned_by.get_full_name', read_only=True)
-
-    description = serializers.CharField(required=True)
-    due_date = serializers.DateTimeField(required=True)
-    person_responsible = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
-    person_responsible_name = serializers.CharField(source='person_responsible.get_full_name', read_only=True)
-    status = serializers.CharField(required=True)
-
-    class Meta:
-        model = ActionPoint
-        fields = ('id', 'action_point_number', 'trip_reference_number', 'description', 'due_date', 'person_responsible',
-                  'status', 'completed_at', 'actions_taken', 'follow_up', 'comments', 'created_at', 'assigned_by',
-                  'assigned_by_name', 'person_responsible_name', 'trip_id')
-
-    def validate_due_date(self, value):
-        if self.instance:
-            existing_due_date = self.instance.due_date.date()
-        else:
-            existing_due_date = None
-        if (not existing_due_date or existing_due_date != value.date()) and value.date() < datetime.utcnow().date():
-            raise ValidationError('Due date cannot be earlier than today.')
-        return value
-
-    def validate(self, attrs):
-        error_dict = {}
-        status = attrs.get('status')
-        if status is None and self.instance:
-            status = self.instance.status
-
-        if status == ActionPoint.COMPLETED and not attrs.get('completed_at'):
-            error_dict['completed_at'] = serializers.Field.default_error_messages['required']
-
-        if (status == ActionPoint.COMPLETED or attrs.get('completed_at')) and not attrs.get('actions_taken'):
-            error_dict['actions_taken'] = serializers.Field.default_error_messages['required']
-
-        if error_dict:
-            raise ValidationError(error_dict)
-
-        return attrs
-
-    def validate_status(self, value):
-        statuses = dict(ActionPoint.STATUS).keys()
-        if value not in statuses:
-            raise ValidationError('Invalid status. Possible choices: {}'.format(', '.join(sorted(statuses))))
-        return value
 
 
 class ItineraryItemSerializer(PermissionBasedModelSerializer):
@@ -237,7 +186,7 @@ class TravelDetailsSerializer(PermissionBasedModelSerializer):
     cost_summary = CostSummarySerializer(read_only=True)
     report = serializers.CharField(source='report_note', required=False, default='', allow_blank=True)
     mode_of_travel = serializers.ListField(child=LowerTitleField(), allow_null=True, required=False)
-    action_points = ActionPointSerializer(many=True, required=False)
+    action_points = ActionPointSerializer(source='actionpoint_set', many=True, required=False)
     section = serializers.PrimaryKeyRelatedField(source='sector', queryset=Sector.objects.all(),
                                                  allow_null=True, required=False)
 
@@ -250,8 +199,8 @@ class TravelDetailsSerializer(PermissionBasedModelSerializer):
                   'traveler', 'start_date', 'ta_required', 'purpose', 'id', 'itinerary', 'expenses', 'deductions',
                   'cost_assignments', 'clearances', 'status', 'activities', 'mode_of_travel', 'estimated_travel_cost',
                   'currency', 'completed_at', 'canceled_at', 'rejection_note', 'cancellation_note', 'attachments',
-                  'cost_summary', 'certification_note', 'report', 'additional_note', 'misc_expenses', 'action_points',
-                  'first_submission_date')
+                  'cost_summary', 'certification_note', 'report', 'additional_note', 'misc_expenses',
+                  'action_points', 'first_submission_date')
         # Review this, as a developer could be confusing why the status field is not saved during an update
         read_only_fields = ('status', 'reference_number')
 

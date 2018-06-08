@@ -15,8 +15,9 @@ from etools.applications.notification.utils import send_notification_using_templ
 from etools.applications.publics.models import TravelExpenseType
 from etools.applications.t2f.helpers.cost_summary_calculator import CostSummaryCalculator
 from etools.applications.t2f.helpers.invoice_maker import InvoiceMaker
-from etools.applications.t2f.serializers.mailing import ActionPointMailSerializer, TravelMailSerializer
+from etools.applications.t2f.serializers.mailing import TravelMailSerializer
 from etools.applications.users.models import WorkspaceCounter
+from etools.applications.utils.common.urlresolvers import build_frontend_url
 
 log = logging.getLogger(__name__)
 
@@ -454,6 +455,9 @@ class Travel(models.Model):
         maker = InvoiceMaker(self)
         maker.do_invoicing()
 
+    def get_object_url(self):
+        return build_frontend_url('t2f', 'edit-travel', self.id)
+
 
 class TravelActivity(models.Model):
     travels = models.ManyToManyField('Travel', related_name='activities', verbose_name=_('Travels'))
@@ -638,6 +642,7 @@ class TravelAttachment(models.Model):
     file = models.FileField(upload_to=determine_file_upload_path, max_length=255, verbose_name=_('File'))
 
 
+# TODO remove when cleaning migrations
 def make_action_point_number():
     year = timezone_now().year
     action_points_qs = ActionPoint.objects.select_for_update().filter(created_at__year=year)
@@ -699,43 +704,43 @@ class ActionPoint(models.Model):
         on_delete=models.CASCADE,
     )
 
-    def save(self, *args, **kwargs):
-        created = self.pk is None
+    # def save(self, *args, **kwargs):
+    #     created = self.pk is None
+    #
+    #     if self.status == ActionPoint.OPEN and self.actions_taken:
+    #         self.status = ActionPoint.ONGOING
+    #
+    #     if self.status in [ActionPoint.OPEN, ActionPoint.ONGOING] and self.actions_taken and self.completed_at:
+    #         self.status = ActionPoint.COMPLETED
+    #
+    #     super(ActionPoint, self).save(*args, **kwargs)
+    #
+    #     if created:
+    #         self.send_notification_email()
 
-        if self.status == ActionPoint.OPEN and self.actions_taken:
-            self.status = ActionPoint.ONGOING
-
-        if self.status in [ActionPoint.OPEN, ActionPoint.ONGOING] and self.actions_taken and self.completed_at:
-            self.status = ActionPoint.COMPLETED
-
-        super(ActionPoint, self).save(*args, **kwargs)
-
-        if created:
-            self.send_notification_email()
-
-    def send_notification_email(self):
-        # TODO this could be async to avoid too long api calls in case of mail server issue
-        serializer = ActionPointMailSerializer(self, context={})
-
-        recipient = self.person_responsible.email
-        cc = self.assigned_by.email
-        subject = '[eTools] ACTION POINT ASSIGNED to {}'.format(self.person_responsible)
-        url = 'https://{host}/t2f/action-point/{action_point_id}/'.format(host=settings.HOST,
-                                                                          action_point_id=self.id)
-        trip_url = 'https://{host}/t2f/edit-travel/{travel_id}'.format(host=settings.HOST, travel_id=self.travel.id)
-
-        context = {'action_point': serializer.data, 'url': url, 'trip_url': trip_url}
-        template_name = 'emails/action_point_assigned.html'
-
-        send_notification_using_templates(
-            recipients=[recipient],
-            cc=[cc],
-            from_address=settings.DEFAULT_FROM_EMAIL,  # TODO what should sender be?
-            subject_template_content=subject,
-            html_template_filename=template_name,
-            text_template_content='',
-            context=context,
-        )
+    # def send_notification_email(self):
+    #     TODO this could be async to avoid too long api calls in case of mail server issue
+    #     serializer = ActionPointMailSerializer(self, context={})
+    #
+    #     recipient = self.person_responsible.email
+    #     cc = self.assigned_by.email
+    #     subject = '[eTools] ACTION POINT ASSIGNED to {}'.format(self.person_responsible)
+    #     url = 'https://{host}/t2f/action-point/{action_point_id}/'.format(host=settings.HOST,
+    #                                                                       action_point_id=self.id)
+    #     trip_url = 'https://{host}/t2f/edit-travel/{travel_id}'.format(host=settings.HOST, travel_id=self.travel.id)
+    #
+    #     context = {'action_point': serializer.data, 'url': url, 'trip_url': trip_url}
+    #     template_name = 'emails/action_point_assigned.html'
+    #
+    #     send_notification_using_templates(
+    #         recipients=[recipient],
+    #         cc=[cc],
+    #         from_address=settings.DEFAULT_FROM_EMAIL,  # TODO what should sender be?
+    #         subject_template_content=subject,
+    #         html_template_filename=template_name,
+    #         text_template_content='',
+    #         context=context,
+    #     )
 
 
 class Invoice(models.Model):
