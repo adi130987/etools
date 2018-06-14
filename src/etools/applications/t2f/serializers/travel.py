@@ -186,7 +186,7 @@ class TravelDetailsSerializer(PermissionBasedModelSerializer):
     cost_summary = CostSummarySerializer(read_only=True)
     report = serializers.CharField(source='report_note', required=False, default='', allow_blank=True)
     mode_of_travel = serializers.ListField(child=LowerTitleField(), allow_null=True, required=False)
-    action_points = ActionPointSerializer(source='actionpoint_set', many=True, required=False)
+    action_points = ActionPointSerializer(source='actionpoint_set', many=True, required=False, read_only=True)
     section = serializers.PrimaryKeyRelatedField(source='sector', queryset=Sector.objects.all(),
                                                  allow_null=True, required=False)
 

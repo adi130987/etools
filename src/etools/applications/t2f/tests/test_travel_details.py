@@ -50,7 +50,7 @@ class TravelDetails(URLAssertionMixin, BaseTenantTestCase):
         self.assertIntParamRegexes(names_and_paths, 't2f:travels:details:')
 
     def test_details_view(self):
-        with self.assertNumQueries(22):
+        with self.assertNumQueries(23):
             response = self.forced_auth_req('get', reverse('t2f:travels:details:index',
                                                            kwargs={'travel_pk': self.travel.id}),
                                             user=self.unicef_staff)
@@ -72,7 +72,7 @@ class TravelDetails(URLAssertionMixin, BaseTenantTestCase):
             name=u'\u0628\u0631\u0646\u0627\u0645\u062c \u062a\u062f\u0631\u064a\u0628 \u0627\u0644\u0645\u062a\u0627\u0628\u0639\u064a\u0646.pdf',  # noqa
             file=factory.django.FileField(filename=u'travels/lebanon/24800/\u0628\u0631\u0646\u0627\u0645\u062c_\u062a\u062f\u0631\u064a\u0628_\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u064a\u0646.pdf')  # noqa
         )
-        with self.assertNumQueries(22):
+        with self.assertNumQueries(23):
             response = self.forced_auth_req(
                 'get',
                 reverse('t2f:travels:details:index', args=[self.travel.pk]),
