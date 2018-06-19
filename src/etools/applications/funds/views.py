@@ -5,12 +5,11 @@ from django.db.models import Q
 from django.utils.translation import ugettext as _
 
 from rest_framework import permissions, status
-from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer, JSONRenderer
+from unicef_djangolib.drf.exports import ExportModelView
 
-from etools.applications.EquiTrack.mixins import ExportModelMixin
 from etools.applications.EquiTrack.renderers import CSVFlatRenderer
 from etools.applications.funds.models import (Donor, FundsCommitmentHeader, FundsCommitmentItem,
                                               FundsReservationHeader, FundsReservationItem, Grant,)
@@ -131,7 +130,7 @@ class FRsView(APIView):
         return Response(serializer.data)
 
 
-class FundsReservationHeaderListAPIView(ExportModelMixin, ListAPIView):
+class FundsReservationHeaderListAPIView(ExportModelView):
     """
     Returns a list of FundsReservationHeaders.
     """
@@ -175,7 +174,7 @@ class FundsReservationHeaderListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class FundsReservationItemListAPIView(ExportModelMixin, ListAPIView):
+class FundsReservationItemListAPIView(ExportModelView):
     """
     Returns a list of FundsReservationItems.
     """
@@ -219,7 +218,7 @@ class FundsReservationItemListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class FundsCommitmentHeaderListAPIView(ExportModelMixin, ListAPIView):
+class FundsCommitmentHeaderListAPIView(ExportModelView):
     """
     Returns a list of FundsCommitmentHeaders.
     """
@@ -250,7 +249,7 @@ class FundsCommitmentHeaderListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class FundsCommitmentItemListAPIView(ExportModelMixin, ListAPIView):
+class FundsCommitmentItemListAPIView(ExportModelView):
     """
     Returns a list of FundsCommitmentItems.
     """
@@ -292,7 +291,7 @@ class FundsCommitmentItemListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class GrantListAPIView(ExportModelMixin, ListAPIView):
+class GrantListAPIView(ExportModelView):
     """
     Returns a list of Grants.
     """
@@ -334,7 +333,7 @@ class GrantListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class DonorListAPIView(ExportModelMixin, ListAPIView):
+class DonorListAPIView(ExportModelView):
     """
     Returns a list of Donors.
     """

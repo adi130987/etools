@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import mixins, permissions, viewsets
 from rest_framework.generics import ListAPIView
+from unicef_djangolib.etag import etag_cached
 
-from etools.applications.EquiTrack.utils import etag_cached
 from etools.applications.locations.models import CartoDBTable, GatewayType, Location
 from etools.applications.locations.serializers import (CartoDBTableSerializer, GatewayTypeSerializer,
                                                        LocationLightSerializer, LocationSerializer,)

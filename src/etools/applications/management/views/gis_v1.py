@@ -3,8 +3,8 @@ from django.db.models import Q
 
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
+from unicef_djangolib.drf.permissions import IsSuperUser
 
-from etools.applications.EquiTrack.permissions import IsSuperUser
 from etools.applications.locations.models import Location
 from etools.applications.management.serializers import (
     GisLocationWktSerializer,

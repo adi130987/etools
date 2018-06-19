@@ -8,15 +8,15 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.generics import (
     DestroyAPIView,
-    ListAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework_csv import renderers as r
+from unicef_djangolib.drf.exports import ExportModelView
+from unicef_djangolib.drf.views import QueryStringFilterAPIView
 
-from etools.applications.EquiTrack.mixins import ExportModelMixin, QueryStringFilterMixin
 from etools.applications.EquiTrack.renderers import CSVFlatRenderer
 from etools.applications.partners.exports_v2 import AgreementCSVRenderer
 from etools.applications.partners.filters import PartnerScopeFilter
@@ -42,7 +42,7 @@ from etools.applications.partners.validation.agreements import AgreementValid
 from etools_validator.mixins import ValidatorViewMixin
 
 
-class AgreementListAPIView(QueryStringFilterMixin, ExportModelMixin, ValidatorViewMixin, ListCreateAPIView):
+class AgreementListAPIView(QueryStringFilterAPIView, ExportModelView, ValidatorViewMixin, ListCreateAPIView):
     """
     Create new Agreements.
     Returns a list of Agreements.
@@ -55,6 +55,15 @@ class AgreementListAPIView(QueryStringFilterMixin, ExportModelMixin, ValidatorVi
         AgreementCSVRenderer,
         CSVFlatRenderer,
     )
+
+    filters = (
+        ('agreement_type', 'agreement_type__in'),
+        ('status', 'status__in'),
+        ('partner_name', 'partner__name__in'),
+        ('start', 'start__gt'),
+        ('end', 'end__lte'),
+    )
+    search_terms = ('partner__name__icontains', 'agreement_number__icontains')
 
     SERIALIZER_MAP = {
         'amendments': AgreementAmendmentCreateUpdateSerializer
@@ -82,16 +91,8 @@ class AgreementListAPIView(QueryStringFilterMixin, ExportModelMixin, ValidatorVi
         if self.request.query_params:
             queries = []
 
-            filters = (
-                ('agreement_type', 'agreement_type__in'),
-                ('status', 'status__in'),
-                ('partner_name', 'partner__name__in'),
-                ('start', 'start__gt'),
-                ('end', 'end__lte'),
-            )
-            search_terms = ['partner__name__icontains', 'agreement_number__icontains']
-            queries.extend(self.filter_params(filters))
-            queries.append(self.search_params(search_terms))
+            queries.extend(self.filter_params())
+            queries.append(self.search_params())
 
             if queries:
                 expression = functools.reduce(operator.and_, queries)
@@ -177,7 +178,7 @@ class AgreementDetailAPIView(ValidatorViewMixin, RetrieveUpdateDestroyAPIView):
         return Response(AgreementDetailSerializer(instance, context=self.get_serializer_context()).data)
 
 
-class AgreementAmendmentListAPIView(ExportModelMixin, ListAPIView):
+class AgreementAmendmentListAPIView(ExportModelView):
     """Returns a list of Agreement Amendments"""
     serializer_class = AgreementAmendmentListSerializer
     filter_backends = (PartnerScopeFilter,)

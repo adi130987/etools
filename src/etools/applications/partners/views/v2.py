@@ -11,9 +11,9 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from unicef_djangolib.fields import CURRENCIES
 
 from etools.applications.attachments.models import FileType as AttachmentFileType
-from etools.applications.EquiTrack.fields import CURRENCIES
 from etools.applications.funds.models import FundsReservationItem
 from etools.applications.locations.models import GatewayType
 from etools.applications.partners.filters import PartnerScopeFilter

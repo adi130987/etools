@@ -18,8 +18,9 @@ from rest_framework.generics import (
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework_csv import renderers as r
+from unicef_djangolib.drf.exports import ExportModelView
+from unicef_djangolib.drf.views import QueryStringFilterAPIView
 
-from etools.applications.EquiTrack.mixins import ExportModelMixin, QueryStringFilterMixin
 from etools.applications.EquiTrack.renderers import CSVFlatRenderer
 from etools.applications.EquiTrack.utils import get_data_from_insight
 from etools.applications.partners.exports_v2 import (
@@ -68,7 +69,7 @@ from etools.applications.vision.adapters.partner import PartnerSynchronizer
 from etools_validator.mixins import ValidatorViewMixin
 
 
-class PartnerOrganizationListAPIView(QueryStringFilterMixin, ExportModelMixin, ListCreateAPIView):
+class PartnerOrganizationListAPIView(QueryStringFilterAPIView, ExportModelView, ListCreateAPIView):
     """
     Create new Partners.
     Returns a list of Partners.
@@ -82,6 +83,12 @@ class PartnerOrganizationListAPIView(QueryStringFilterMixin, ExportModelMixin, L
         PartnerOrganizationCSVRenderer,
         CSVFlatRenderer
     )
+    filters = (
+        ('partner_type', 'partner_type__in'),
+        ('cso_type', 'cso_type__in'),
+        ('rating', 'rating__in'),
+    )
+    search_terms = ('name__icontains', 'vendor_number__icontains', 'short_name__icontains')
 
     def get_serializer_class(self, format=None):
         """
@@ -115,14 +122,8 @@ class PartnerOrganizationListAPIView(QueryStringFilterMixin, ExportModelMixin, L
                 else:
                     return PartnerOrganization.objects.filter(id__in=ids)
             queries = []
-            filters = (
-                ('partner_type', 'partner_type__in'),
-                ('cso_type', 'cso_type__in'),
-                ('rating', 'rating__in'),
-            )
-            search_terms = ['name__icontains', 'vendor_number__icontains', 'short_name__icontains']
-            queries.extend(self.filter_params(filters))
-            queries.append(self.search_params(search_terms))
+            queries.extend(self.filter_params())
+            queries.append(self.search_params())
 
             if "hidden" in query_params.keys():
                 hidden = None
@@ -239,7 +240,7 @@ class PlannedEngagementAPIView(ListAPIView):
     serializer_class = PlannedEngagementSerializer
 
 
-class PartnerStaffMemberListAPIVIew(ExportModelMixin, ListAPIView):
+class PartnerStaffMemberListAPIVIew(ExportModelView):
     """
     Returns a list of all Partner staff members
     """
@@ -266,7 +267,7 @@ class PartnerStaffMemberListAPIVIew(ExportModelMixin, ListAPIView):
         return super(PartnerStaffMemberListAPIVIew, self).get_serializer_class()
 
 
-class PartnerOrganizationAssessmentListView(ExportModelMixin, ListAPIView):
+class PartnerOrganizationAssessmentListView(ExportModelView):
     """
     Returns a list of all Partner staff members
     """

@@ -1,6 +1,5 @@
 from rest_framework_csv import renderers as r
-
-from etools.applications.EquiTrack.renderers import FriendlyCSVRenderer
+from unicef_djangolib.drf.renderers import FriendlyCSVRenderer
 
 
 class PartnerOrganizationCSVRenderer(r.CSVRenderer):

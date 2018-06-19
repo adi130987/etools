@@ -11,8 +11,8 @@ from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework_csv import renderers
+from unicef_djangolib.drf.views import QueryStringFilterAPIView
 
-from etools.applications.EquiTrack.mixins import QueryStringFilterMixin
 from etools.applications.t2f.filters import (action_points, travel_list, TravelActivityInterventionFilter,
                                              TravelActivityPartnerFilter, TravelRelatedModelFilter,)
 from etools.applications.t2f.helpers.clone_travel import CloneTravelHelper
@@ -140,11 +140,15 @@ class TravelAttachmentViewSet(mixins.ListModelMixin,
         return context
 
 
-class TravelActivityViewSet(QueryStringFilterMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class TravelActivityViewSet(QueryStringFilterAPIView, mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAdminUser,)
     serializer_class = TravelActivityByPartnerSerializer
     filter_backends = (TravelActivityPartnerFilter,)
     lookup_url_kwarg = 'partner_organization_pk'
+    filters = (
+        ('year', 'travels__end_date__year'),
+        ('status', 'travels__status'),
+    )
 
     def get_queryset(self):
         qs = TravelActivity.objects.prefetch_related('travels', 'primary_traveler', 'locations')
@@ -152,11 +156,7 @@ class TravelActivityViewSet(QueryStringFilterMixin, mixins.ListModelMixin, views
         query_params = self.request.query_params
         if query_params:
             queries = []
-            filters = (
-                ('year', 'travels__end_date__year'),
-                ('status', 'travels__status'),
-            )
-            queries.extend(self.filter_params(filters))
+            queries.extend(self.filter_params())
             if queries:
                 expression = functools.reduce(operator.and_, queries)
                 qs = qs.filter(expression)
@@ -174,11 +174,15 @@ class TravelActivityViewSet(QueryStringFilterMixin, mixins.ListModelMixin, views
         return qs
 
 
-class TravelActivityPerInterventionViewSet(QueryStringFilterMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class TravelActivityPerInterventionViewSet(QueryStringFilterAPIView, mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAdminUser,)
     serializer_class = TravelActivityByPartnerSerializer
     filter_backends = (TravelActivityInterventionFilter,)
     lookup_url_kwarg = 'partnership_pk'
+
+    filters = (
+        ('year', 'travels__end_date__year'),
+    )
 
     def get_queryset(self):
         qs = TravelActivity.objects.prefetch_related('travels', 'primary_traveler', 'locations')
@@ -187,10 +191,7 @@ class TravelActivityPerInterventionViewSet(QueryStringFilterMixin, mixins.ListMo
         query_params = self.request.query_params
         if query_params:
             queries = []
-            filters = (
-                ('year', 'travels__end_date__year'),
-            )
-            queries.extend(self.filter_params(filters))
+            queries.extend(self.filter_params())
             if queries:
                 expression = functools.reduce(operator.and_, queries)
                 qs = qs.filter(expression)

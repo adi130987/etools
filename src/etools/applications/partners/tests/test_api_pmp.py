@@ -6,8 +6,8 @@ from django.urls import reverse
 
 from rest_framework import status
 from tenant_schemas.test.client import TenantClient
+from unicef_djangolib.fields import CURRENCY_LIST
 
-from etools.applications.EquiTrack.fields import CURRENCY_LIST
 from etools.applications.EquiTrack.tests.cases import BaseTenantTestCase
 from etools.applications.EquiTrack.tests.mixins import URLAssertionMixin
 from etools.applications.locations.tests.factories import GatewayTypeFactory

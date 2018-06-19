@@ -2,8 +2,8 @@ from django.contrib.gis import admin
 
 from leaflet.admin import LeafletGeoAdmin
 from mptt.admin import MPTTModelAdmin
+from unicef_djangolib.forms import AutoSizeTextForm
 
-from etools.applications.EquiTrack.forms import AutoSizeTextForm
 from etools.applications.locations.forms import CartoDBTableForm
 from etools.applications.locations.models import CartoDBTable, GatewayType, Location
 from etools.applications.locations.tasks import update_sites_from_cartodb

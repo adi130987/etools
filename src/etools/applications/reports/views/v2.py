@@ -19,10 +19,10 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework_csv.renderers import CSVRenderer, JSONRenderer
+from unicef_djangolib.drf.exports import ExportModelView
+from unicef_djangolib.drf.views import QueryStringFilterAPIView
 
-from etools.applications.EquiTrack.mixins import ExportModelMixin, QueryStringFilterMixin
 from etools.applications.EquiTrack.renderers import CSVFlatRenderer
 from etools.applications.partners.filters import PartnerScopeFilter
 from etools.applications.partners.models import Intervention
@@ -144,7 +144,7 @@ class ResultIndicatorListAPIView(ListAPIView):
         )
 
 
-class LowerResultsListAPIView(ExportModelMixin, ListAPIView):
+class LowerResultsListAPIView(ExportModelView):
     """
     Returns a list of LowerResults.
     """
@@ -217,7 +217,7 @@ class DisaggregationRetrieveUpdateView(RetrieveUpdateAPIView):
     permission_classes = (PMEPermission, )
 
 
-class AppliedIndicatorListAPIView(ExportModelMixin, ListAPIView):
+class AppliedIndicatorListAPIView(ExportModelView):
     """
     Returns a list of AppliedIndicators.
     """
@@ -261,7 +261,7 @@ class AppliedIndicatorListAPIView(ExportModelMixin, ListAPIView):
         return q
 
 
-class AppliedIndicatorLocationExportView(QueryStringFilterMixin, APIView):
+class AppliedIndicatorLocationExportView(QueryStringFilterAPIView):
 
     def get(self, request, *args, **kwargs):
 
@@ -352,7 +352,7 @@ class AppliedIndicatorLocationExportView(QueryStringFilterMixin, APIView):
                 ('unicef_focal_points', 'unicef_focal_points__in'),
             )
 
-            search_terms = ['title__icontains', 'agreement__partner__name__icontains', 'number__icontains']
+            search_terms = ('title__icontains', 'agreement__partner__name__icontains', 'number__icontains')
             queries.extend(self.filter_params(filters))
             queries.append(self.search_params(search_terms))
 
@@ -375,7 +375,7 @@ class AppliedIndicatorLocationExportView(QueryStringFilterMixin, APIView):
                 ('sections', 'section__in'),
             )
 
-            search_terms = ['title__icontains', 'agreement__partner__name__icontains', 'number__icontains']
+            search_terms = ('title__icontains', 'agreement__partner__name__icontains', 'number__icontains')
             queries.extend(self.filter_params(filters))
             queries.append(self.search_params(search_terms))
 
