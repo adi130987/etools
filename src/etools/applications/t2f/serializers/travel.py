@@ -521,7 +521,7 @@ class TravelListSerializer(TravelDetailsSerializer):
 
     class Meta:
         model = Travel
-        fields = ('id', 'reference_number', 'traveler', 'purpose', 'status', 'section', 'office', 'start_date',
+        fields = ('id', 'reference_number', 'traveler', 'purpose', 'status', 'office', 'start_date',
                   'end_date', 'supervisor_name')
         read_only_fields = ('status',)
 
