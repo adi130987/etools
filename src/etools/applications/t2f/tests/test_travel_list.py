@@ -109,7 +109,7 @@ class TravelList(URLAssertionMixin, BaseTenantTestCase):
         travel = TravelFactory(reference_number=make_travel_reference_number(),
                                traveler=self.traveler,
                                supervisor=self.unicef_staff,
-                               sector=None)
+                               section=None)
 
         with self.assertNumQueries(10):
             response = self.forced_auth_req(

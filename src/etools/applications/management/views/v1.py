@@ -26,13 +26,11 @@ class ActiveUsers(APIView):
     model = UserProfile
 
     def get(self, request, **kwargs):
-        # get all the countries:
         country_list = Country.objects.values_list('name', flat=True)
 
         results = []
         for country in country_list:
             country_records = {}
-            # create the first filter
             user_qry = UserProfile.objects.filter(
                 user__is_staff=True,
                 user__is_active=True,
