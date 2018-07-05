@@ -35,7 +35,7 @@ from etools.applications.partners.tests.factories import (AgreementAmendmentFact
 from etools.applications.partners.views import partner_organization_v2, v2
 from etools.applications.reports.models import ResultType
 from etools.applications.reports.tests.factories import (CountryProgrammeFactory, ResultFactory,
-                                                         ResultTypeFactory, SectorFactory,)
+                                                         ResultTypeFactory, SectionFactory,)
 from etools.applications.users.tests.factories import GroupFactory, OfficeFactory, UserFactory
 
 
@@ -1410,7 +1410,7 @@ class TestInterventionViews(BaseTenantTestCase):
         )
 
         self.intervention = response.data
-        self.section = SectorFactory()
+        self.section = SectionFactory()
 
         self.fund_commitment_header = FundsCommitmentHeader.objects.create(
             vendor_code="test1",
@@ -2071,7 +2071,7 @@ class TestPartnershipDashboardView(BaseTenantTestCase):
         )
         self.intervention = response.data
 
-        self.section = SectorFactory()
+        self.section = SectionFactory()
 
         # Basic data to adjust in tests
         self.intervention_data = {

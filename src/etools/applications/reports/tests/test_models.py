@@ -10,7 +10,7 @@ from etools.applications.partners.tests.factories import AgreementFactory
 from etools.applications.reports.models import CountryProgramme, Indicator, IndicatorBlueprint, Quarter
 from etools.applications.reports.tests.factories import (CountryProgrammeFactory, IndicatorBlueprintFactory,
                                                          IndicatorFactory, LowerResultFactory, QuarterFactory,
-                                                         ResultFactory, ResultTypeFactory, SectorFactory, UnitFactory,)
+                                                         ResultFactory, ResultTypeFactory, SectionFactory, UnitFactory,)
 
 
 class TestStrUnicode(SimpleTestCase):
@@ -34,10 +34,10 @@ class TestStrUnicode(SimpleTestCase):
         self.assertEqual(str(instance), u'\xccsland')
 
     def test_sector(self):
-        instance = SectorFactory.build(name='xyz')
+        instance = SectionFactory.build(name='xyz')
         self.assertEqual(str(instance), u' xyz')
 
-        instance = SectorFactory.build(name=u'\xccsland')
+        instance = SectionFactory.build(name=u'\xccsland')
         self.assertEqual(str(instance), u' \xccsland')
 
     def test_result(self):

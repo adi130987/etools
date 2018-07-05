@@ -10,10 +10,10 @@ from etools.applications.reports.models import (AppliedIndicator, CountryProgram
                                                 LowerResult, Result, Sector, Unit,)
 
 
-class SectorListFilter(admin.SimpleListFilter):
+class SectionListFilter(admin.SimpleListFilter):
 
-    title = 'Sector'
-    parameter_name = 'sector'
+    title = 'Section'
+    parameter_name = 'section'
     filter_by = 'sector__id'
 
     def lookups(self, request, model_admin):
@@ -41,7 +41,7 @@ class SectorListFilter(admin.SimpleListFilter):
         return queryset
 
 
-class SectorAdmin(admin.ModelAdmin):
+class SectionAdmin(admin.ModelAdmin):
     form = AutoSizeTextForm
     list_display = ('name', 'color', 'dashboard',)
     list_editable = ('color', 'dashboard',)
@@ -54,7 +54,7 @@ class IndicatorAdmin(admin.ModelAdmin):
         'view_on_dashboard',
     )
     list_filter = (
-        SectorListFilter,
+        SectionListFilter,
         'result__result_type',
         'ram_indicator',
     )
@@ -205,7 +205,7 @@ class DisaggregationValueAdmin(admin.ModelAdmin):
 
 admin.site.register(Result, ResultAdmin)
 admin.site.register(CountryProgramme)
-admin.site.register(Sector, SectorAdmin)
+admin.site.register(Sector, SectionAdmin)
 admin.site.register(Unit, ImportExportModelAdmin)
 admin.site.register(Indicator, IndicatorAdmin)
 # admin.site.register(ResultChain)

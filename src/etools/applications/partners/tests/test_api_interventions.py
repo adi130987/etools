@@ -26,14 +26,14 @@ from etools.applications.partners.tests.factories import (
     InterventionAttachmentFactory,
     InterventionFactory,
     InterventionResultLinkFactory,
-    InterventionSectorLocationLinkFactory,
+    InterventionSectionLocationLinkFactory,
     PartnerFactory,
 )
 from etools.applications.partners.tests.test_utils import setup_intervention_test_data
 from etools.applications.reports.models import AppliedIndicator, ReportingRequirement
 from etools.applications.reports.tests.factories import (AppliedIndicatorFactory, CountryProgrammeFactory,
                                                          IndicatorFactory, LowerResultFactory,
-                                                         ReportingRequirementFactory, ResultFactory, SectorFactory,)
+                                                         ReportingRequirementFactory, ResultFactory, SectionFactory)
 from etools.applications.users.tests.factories import GroupFactory, UserFactory
 from etools.applications.utils.common.utils import get_all_field_names
 
@@ -459,8 +459,8 @@ class TestInterventionsAPI(BaseTenantTestCase):
         self.assertEqual(status_code, status.HTTP_200_OK)
         self.assertEqual(len(response), 3)
 
-        section1 = SectorFactory()
-        section2 = SectorFactory()
+        section1 = SectionFactory()
+        section2 = SectionFactory()
 
         # add another intervention to make sure that the queries are constant
         data = {
@@ -492,8 +492,8 @@ class TestInterventionsAPI(BaseTenantTestCase):
         self.assertEqual(status_code, status.HTTP_200_OK)
         self.assertEqual(len(response), 3)
 
-        section1 = SectorFactory()
-        section2 = SectorFactory()
+        section1 = SectionFactory()
+        section2 = SectionFactory()
 
         EXTRA_INTERVENTIONS = 15
         for i in range(0, EXTRA_INTERVENTIONS + 1):
@@ -1082,7 +1082,7 @@ class TestAPInterventionIndicatorsCreateView(BaseTenantTestCase):
                           kwargs={'lower_result_pk': cls.lower_result.id})
 
         location = LocationFactory()
-        section = SectorFactory()
+        section = SectionFactory()
 
         cls.result_link.intervention.flat_locations.add(location)
         cls.result_link.intervention.sections.add(section)
@@ -1181,7 +1181,7 @@ class TestAPInterventionIndicatorsUpdateView(BaseTenantTestCase):
         )
 
         location = LocationFactory()
-        cls.section = SectorFactory()
+        cls.section = SectionFactory()
 
         cls.result_link.intervention.flat_locations.add(location)
         cls.result_link.intervention.sections.add(cls.section)
@@ -1652,20 +1652,20 @@ class TestInterventionAmendmentDeleteView(BaseTenantTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class TestInterventionSectorLocationLinkListAPIView(BaseTenantTestCase):
+class TestInterventionSectionLocationLinkListAPIView(BaseTenantTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.unicef_staff = UserFactory(is_staff=True)
-        InterventionSectorLocationLinkFactory()
+        InterventionSectionLocationLinkFactory()
         cls.intervention = InterventionFactory()
-        cls.sector = SectorFactory(name="Sector Name")
-        cls.link = InterventionSectorLocationLinkFactory(
+        cls.sector = SectionFactory(name="Sector Name")
+        cls.link = InterventionSectionLocationLinkFactory(
             intervention=cls.intervention,
             sector=cls.sector
         )
 
     def setUp(self):
-        super(TestInterventionSectorLocationLinkListAPIView, self).setUp()
+        super(TestInterventionSectionLocationLinkListAPIView, self).setUp()
         self.url = reverse("partners_api:intervention-sector-locations")
 
     def assertResponseFundamentals(self, response):
@@ -1756,7 +1756,7 @@ class TestInterventionListMapView(BaseTenantTestCase):
         # since the cache is extremely unreliable as tests progress this is something to go around that
         if ts.id:
             ts.delete()
-        sector = SectorFactory()
+        sector = SectionFactory()
         intervention = InterventionFactory()
         rl = InterventionResultLinkFactory(intervention=intervention)
         llo = LowerResultFactory(result_link=rl)
@@ -1774,7 +1774,7 @@ class TestInterventionListMapView(BaseTenantTestCase):
     def test_get_param_section_with_flag(self):
         # set prp mode off flag
         TenantSwitchFactory(name='prp_mode_off', countries=[connection.tenant])
-        sector = SectorFactory()
+        sector = SectionFactory()
         intervention = InterventionFactory()
         intervention.sections.add(sector)
 

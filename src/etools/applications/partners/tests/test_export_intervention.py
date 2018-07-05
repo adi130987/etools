@@ -14,11 +14,11 @@ from etools.applications.partners.tests.factories import (
     InterventionBudgetFactory,
     InterventionFactory,
     InterventionResultLinkFactory,
-    InterventionSectorLocationLinkFactory,
+    InterventionSectionLocationLinkFactory,
     PartnerFactory,
     PartnerStaffFactory,
 )
-from etools.applications.reports.tests.factories import CountryProgrammeFactory, IndicatorFactory, ResultFactory, SectorFactory
+from etools.applications.reports.tests.factories import CountryProgrammeFactory, IndicatorFactory, ResultFactory, SectionFactory
 from etools.applications.users.tests.factories import UserFactory
 
 
@@ -355,13 +355,13 @@ class TestInterventionIndicatorModelExport(BaseInterventionModelExportTestCase):
         self.assertEqual(len(dataset[0]), 19)
 
 
-class TestInterventionSectorLocationLinkModelExport(BaseInterventionModelExportTestCase):
+class TestInterventionSectionLocationLinkModelExport(BaseInterventionModelExportTestCase):
     def setUp(self):
-        super(TestInterventionSectorLocationLinkModelExport, self).setUp()
+        super(TestInterventionSectionLocationLinkModelExport, self).setUp()
         self.location = LocationFactory(
             name="Name",
         )
-        self.link = InterventionSectorLocationLinkFactory(
+        self.link = InterventionSectionLocationLinkFactory(
             intervention=self.intervention,
         )
         self.link.locations.add(self.location)
@@ -424,8 +424,8 @@ class TestInterventionLocationExport(BaseInterventionModelExportTestCase):
         self.intervention.flat_locations.add(LocationFactory(name='Location 0'), LocationFactory(name='Location 1'))
 
         # Some sections
-        sec = SectorFactory(name='Sector 0')
-        sec1 = SectorFactory(name='Sector 1')
+        sec = SectionFactory(name='Sector 0')
+        sec1 = SectionFactory(name='Sector 1')
         self.intervention.sections.add(sec, sec1)
 
         # Some focal points
@@ -441,8 +441,8 @@ class TestInterventionLocationExport(BaseInterventionModelExportTestCase):
         # Another intervention, with no locations
         self.intervention2 = InterventionFactory(agreement=AgreementFactory(partner=PartnerFactory(name='Partner 2')))
         # Sections
-        sec2 = SectorFactory(name='Sector 2')
-        sec3 = SectorFactory(name='Sector 3')
+        sec2 = SectionFactory(name='Sector 2')
+        sec3 = SectionFactory(name='Sector 3')
         self.intervention2.sections.add(sec2, sec3)
         # Results
         InterventionResultLinkFactory(cp_output=ResultFactory(sector=sec2, name='Result C'), intervention=self.intervention2)

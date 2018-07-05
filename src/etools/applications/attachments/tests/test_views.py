@@ -11,7 +11,7 @@ from etools.applications.partners.tests.factories import (AgreementAmendmentFact
                                                           AssessmentFactory, InterventionAmendmentFactory,
                                                           InterventionAttachmentFactory, InterventionFactory,
                                                           InterventionResultLinkFactory,
-                                                          InterventionSectorLocationLinkFactory, PartnerFactory,)
+                                                          InterventionSectionLocationLinkFactory, PartnerFactory,)
 from etools.applications.tpm.tests.factories import SimpleTPMPartnerFactory, TPMActivityFactory, TPMVisitFactory
 from etools.applications.users.tests.factories import UserFactory
 
@@ -52,7 +52,7 @@ class TestAttachmentListView(BaseTenantTestCase):
         cls.result_link = InterventionResultLinkFactory(
             intervention=cls.intervention
         )
-        cls.sector_location = InterventionSectorLocationLinkFactory(
+        cls.sector_location = InterventionSectionLocationLinkFactory(
             intervention=cls.intervention
         )
         cls.intervention_amendment = InterventionAmendmentFactory(

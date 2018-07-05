@@ -28,7 +28,7 @@ from etools.applications.partners.tests.factories import (
     InterventionFactory,
     InterventionReportingPeriodFactory,
     InterventionResultLinkFactory,
-    InterventionSectorLocationLinkFactory,
+    InterventionSectionLocationLinkFactory,
     PartnerFactory,
     PartnerPlannedVisitsFactory,
     PartnerStaffFactory,
@@ -36,7 +36,7 @@ from etools.applications.partners.tests.factories import (
     WorkspaceFileTypeFactory,
 )
 from etools.applications.reports.tests.factories import (AppliedIndicatorFactory, CountryProgrammeFactory,
-                                                         LowerResultFactory, ResultFactory, SectorFactory,)
+                                                         LowerResultFactory, ResultFactory, SectionFactory,)
 from etools.applications.t2f.models import Travel, TravelType
 from etools.applications.t2f.tests.factories import TravelActivityFactory, TravelFactory
 from etools.applications.tpm.models import TPMVisit
@@ -728,14 +728,14 @@ class TestInterventionModel(BaseTenantTestCase):
         self.assertEqual(res, "Not fully signed")
 
     def test_sector_names(self):
-        sector_1 = SectorFactory(name="ABC")
-        sector_2 = SectorFactory(name="CBA")
+        sector_1 = SectionFactory(name="ABC")
+        sector_2 = SectionFactory(name="CBA")
         intervention = InterventionFactory()
-        InterventionSectorLocationLinkFactory(
+        InterventionSectionLocationLinkFactory(
             intervention=intervention,
             sector=sector_1,
         )
-        InterventionSectorLocationLinkFactory(
+        InterventionSectionLocationLinkFactory(
             intervention=intervention,
             sector=sector_2,
         )

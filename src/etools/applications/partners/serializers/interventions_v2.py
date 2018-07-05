@@ -25,7 +25,7 @@ from etools.applications.partners.models import (
 )
 from etools.applications.partners.permissions import InterventionPermissions
 from etools.applications.reports.models import AppliedIndicator, LowerResult, ReportingRequirement
-from etools.applications.reports.serializers.v1 import SectorSerializer
+from etools.applications.reports.serializers.v1 import SectionSerializer
 from etools.applications.reports.serializers.v2 import (
     IndicatorSerializer,
     LowerResultCUSerializer,
@@ -240,9 +240,9 @@ class MinimalInterventionListSerializer(serializers.ModelSerializer):
 
 
 # TODO intervention sector locations cleanup
-class InterventionLocationSectorNestedSerializer(serializers.ModelSerializer):
+class InterventionLocationSectionNestedSerializer(serializers.ModelSerializer):
     locations = LocationLightSerializer(many=True)
-    sector = SectorSerializer()
+    sector = SectionSerializer()
 
     class Meta:
         model = InterventionSectorLocationLink
@@ -252,7 +252,7 @@ class InterventionLocationSectorNestedSerializer(serializers.ModelSerializer):
 
 
 # TODO intervention sector locations cleanup
-class InterventionSectorLocationCUSerializer(serializers.ModelSerializer):
+class InterventionSectionLocationCUSerializer(serializers.ModelSerializer):
     class Meta:
         model = InterventionSectorLocationLink
         fields = (
