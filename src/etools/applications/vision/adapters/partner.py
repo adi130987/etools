@@ -216,6 +216,15 @@ class PartnerSynchronizer(VisionDataSynchronizer):
 
             if new:
                 PlannedEngagement.objects.get_or_create(partner=partner_org)
+            else:
+                partner_org.core_values_assessments.filter(
+                    core_values_assessment_date=partner_org.core_values_assessment_date)
+
+                partner_org.core_values_assessments.create(
+                    core_values_assessment_date=partner_org.core_values_assessment_date,
+                    archived=False
+                )
+
 
             processed = 1
 
